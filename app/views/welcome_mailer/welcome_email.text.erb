@@ -1,0 +1,78 @@
+WELCOME TO KICKPARTY!
+===============================================
+
+<%= @user.first_name %>,
+
+<% if @is_guest_email %>
+Congratulations, you've been invited to Kickparty!
+Email: <%= @user.email %>
+Temporary password: <%= @temp_password %>
+Log in and set a new password: http://www.kickparty.com/signin
+<% else %>
+We're super excited that you've decided to become a member of KickParty!
+<% end %>
+
+KickParty allows you to create amazing events, and have your friends help fund them.
+
+* Weddings/Receptions
+* Bachelor/Bachelorette Parties
+* Concerts/Live Events
+* Class Reunions
+* Birthday Parties
+* Holiday Parties
+* Theme Parties
+* Any Many More!
+
+It's easy, it's fast, and it's free!  Give it a try today:
+
+http://www.kickparty.com/events/new
+
+Have questions?  Email us at info@kickparty.com, or give us a call at:
+
+(855) 450-KICK - We'd love to help you get started!
+
+------------------------------------------------------------------------
+
+So, how does KickParty work?
+
+1.  Look through some of our events to get ideas!
+http://www.kickparty.com
+
+2.  Create an event:
+http://www.kickparty.com/events/new
+
+3.  Set a price and share it with your friends
+
+4.  KickParty handles all your guest registrations keeps you posted
+
+5.  Relax!  If enough people fund your event, we charge their cards.
+
+6.  We will remit the funds to you or directly to vendors.
+
+7.  Have fun!  You created an amazing event - your friends love you :)
+
+------------------------------------------------------------------------
+
+Your Profile
+<%= ENV["BASE_URL"] %>/<%= @user.slug %>
+
+------------------------------------------------------------------------
+
+Events you may also like
+
+<% @events.each do |event| %>
+<% event_price = event.tiers[0].base_cost_per_attendee %>
+
+    <%= event.name %>
+    <%= ENV["BASE_URL"] %>/events/<%= event.slug %>
+
+    Starts: <%=get_time_in_time_zone( event.start, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")%>
+    <%= (event_price > 0) ? "Kicks by: #{get_time_in_time_zone( event.deadline, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")}" : "" %>
+    <%= (event_price > 0) ? number_to_currency(event_price) : 'FREE'%>
+    by <%=event.user.first_name%> <%=event.user.last_name%>
+    <%=event.location_address%>
+
+<% end %>
+
+View more events in your area:
+http://www.kickparty.com

@@ -1,0 +1,11 @@
+development:
+  web_client_url: http://localhost:3000
+  mobile_client_url: clientmobile://oauth
+
+test:
+  web_client_url: http://test.kickparty.com
+  mobile_client_url: clientmobile://oauth
+
+production:
+  web_client_url: http://www.kickparty.com
+  mobile_client_url: clientmobile://oauth

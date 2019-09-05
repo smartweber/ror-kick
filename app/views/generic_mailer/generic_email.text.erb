@@ -1,0 +1,31 @@
+<%= @user.first_name %>,
+
+<%= @text %>
+
+------------------------------------------------------------------------
+
+Your Profile
+<%= ENV["BASE_URL"] %>/<%= @user.slug %>
+
+------------------------------------------------------------------------
+
+<% if @show_events %>
+Events you may also like
+
+<% @events.each do |event| %>
+<% event_price = event.tiers[0].base_cost_per_attendee %>
+
+    <%= event.name %>
+    <%= ENV["BASE_URL"] %>/events/<%= event.slug %>
+
+    Starts: <%=get_time_in_time_zone( event.start, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")%>
+    <%= (event_price > 0) ? "Kicks by: #{get_time_in_time_zone( event.deadline, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")}" : "" %>
+    <%= (event_price > 0) ? number_to_currency(event_price) : 'FREE'%>
+    by <%=event.user.first_name%> <%=event.user.last_name%>
+    <%=event.location_address%>
+
+<% end %>
+
+View more events in your area:
+http://www.kickparty.com
+<% end %>

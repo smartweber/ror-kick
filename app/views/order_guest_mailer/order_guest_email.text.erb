@@ -1,0 +1,58 @@
+Your order is confirmed for <%= @event.name %>
+===============================================
+
+Hi <%= @user.first_name %>, this is your order confirmation for <%= @event.name %>
+
+<%= ENV["BASE_URL"] %>/events/<%= @event.slug %>
+
+Organized by <%= "#{@event.user.first_name} #{@event.user.last_name}" %>
+
+------------------------------------------------------------------------
+
+How does this work?
+
+If this event reaches its goal of <%= @event.tiers[0].min_attendee_count %> people by
+<%= @deadline.strftime("%A, %B %e, %Y at %I:%M%p %Z")  %>, the event will kick and 
+we'll send you another email letting you know the event is on!
+
+Contact the organizer at <%= @event.user.email %>
+
+------------------------------------------------------------------------
+
+
+About this event
+
+
+<%= @start.strftime("%A, %B %e, %Y at %I:%M%p %Z")  %>
+
+
+Time: <%= @start.strftime("%A, %B %e, %Y at %I:%M%p %Z")  %>
+
+Location:
+<%= ((@event.location_name.present? && @event.location_address.present?) && (!@event.location_address.include? @event.location_name)) ? @event.location_name + "\n" : "" %><%= @event.location_address %>
+
+------------------------------------------------------------------------
+
+Your Account
+<%= ENV["BASE_URL"] %>/<%= @user.slug %>
+
+------------------------------------------------------------------------
+
+Events you may also like
+
+<% @events.each do |event| %>
+<% event_price = event.tiers[0].base_cost_per_attendee %>
+
+    <%= event.name %>
+    <%= ENV["BASE_URL"] %>/events/<%= event.slug %>
+
+    Starts: <%=get_time_in_time_zone( event.start, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")%>
+    <%= (event_price.present? && event_price > 0) ? "Kicks by: #{get_time_in_time_zone( event.deadline, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")}" : "" %>
+    <%= (event_price.present? && event_price > 0) ? number_to_currency(event_price) : 'FREE'%>
+    by <%=event.user.first_name%> <%=event.user.last_name%>
+    <%=event.location_address%>
+
+<% end %>
+
+View more events in your area:
+http://www.kickparty.com

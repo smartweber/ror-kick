@@ -1,0 +1,2 @@
+class FbFriend < ApplicationRecord
+end

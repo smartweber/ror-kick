@@ -1,0 +1,81 @@
+You have a new attendee for <%= @event.name %>!
+===============================================
+
+Hi <%= @to_user.first_name %>, <%= @user.first_name %> <%= @user.last_name %>
+just signed up for <%= @event.name %>
+
+Event: <%= ENV["BASE_URL"] %>/events/<%= @event.slug %>
+
+Attendee: <%= ENV["BASE_URL"] %>/<%= @user.slug %>
+
+------------------------------------------------------------------------
+
+How does this work?
+
+
+If this event reaches its goal of <%= @event.tiers[0].min_attendee_count %> people by
+<%= @deadline.strftime("%A, %B %e, %Y at %I:%M%p %Z")  %>, we will charge your
+<%= @payment_type %> ending in <%= @number %> for this event according to the details below.
+
+You may contact the attendee at <%= @user.email %>
+
+------------------------------------------------------------------------
+
+
+Order Summary
+---------------------------------------------------------------------
+<%= @order_time.strftime("%A, %B %e, %Y at %I:%M%p %Z")  %>
+
+Order #: <%= @order.id  %>
+
+<% order_total = 0 %>
+<% @order.order_items.each do |oi| %>
+Item: <%= oi.description %>
+Cost: <%= number_to_currency(oi.cost) %>
+<% order_total += oi.cost %>
+
+<% end %>
+
+---------------------------------------------------------------------
+
+Total: <%= number_to_currency(order_total) %>
+
+Charged to: <%= @payment_type %> - XXXX-XXXXXX-<%= @number %>
+
+
+This charge will appear on your card statement as *KickParty Event*
+
+---------------------------------------------------------------------
+
+About this event
+
+Time: <%= @start.strftime("%A, %B %e, %Y at %I:%M%p %Z")  %>
+
+Location:
+<%= ((@event.location_name.present? && @event.location_address.present?) && (!@event.location_address.include? @event.location_name)) ? @event.location_name + "\n" : "" %><%= @event.location_address %>
+
+------------------------------------------------------------------------
+
+Your Account
+<%= ENV["BASE_URL"] %>/<%= @to_user.slug %>
+
+------------------------------------------------------------------------
+
+Events you may also like
+
+<% @events.each do |event| %>
+<% event_price = event.tiers[0].base_cost_per_attendee %>
+
+    <%= event.name %>
+    <%= ENV["BASE_URL"] %>/events/<%= event.slug %>
+
+    Starts: <%=get_time_in_time_zone( event.start, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")%>
+    <%= (event_price.present? && event_price > 0) ? "Kicks by: #{get_time_in_time_zone( event.deadline, (event.timezone_offset/60) ).strftime("%a, %b %e, '%y @ %I:%M%p %Z")}" : "" %>
+    <%= (event_price.present? && event_price > 0) ? number_to_currency(event_price) : 'FREE'%>
+    by <%=event.user.first_name%> <%=event.user.last_name%>
+    <%=event.location_address%>
+
+<% end %>
+
+View more events in your area:
+http://www.kickparty.com
