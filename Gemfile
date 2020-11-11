@@ -10,7 +10,7 @@ gem 'activesupport', '~> 5.0.0'
 
 gem 'rack-cors', :require => 'rack/cors'
 gem 'devise', github: 'plataformatec/devise'
-gem 'omniauth', '~> 1.3', '>= 1.3.1'
+gem 'omniauth', '~> 1.9'
 gem 'paperclip', github: 'thoughtbot/paperclip'
 gem 'aws-sdk', '>= 2.0.0'
 gem 'stripe'
